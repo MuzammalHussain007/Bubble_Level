@@ -98,8 +98,9 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
             val pitch = Math.toDegrees(orientation[1].toDouble()).toFloat()
             val roll = Math.toDegrees(orientation[2].toDouble()).toFloat()
+            val azimuth = Math.toDegrees(orientation[0].toDouble()).toFloat()
 
-            acmView.updateOrientation(pitch, roll)
+            acmView.updateOrientation(pitch, roll,azimuth)
         }
     }
 

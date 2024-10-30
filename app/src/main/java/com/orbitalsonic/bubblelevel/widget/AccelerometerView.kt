@@ -6,7 +6,6 @@ import android.graphics.PointF
 import android.util.AttributeSet
 import android.view.View
 import com.orbitalsonic.bubblelevel.AndroidUtils
-import com.orbitalsonic.bubblelevel.widget.AccelerometerDrawer
 import kotlin.math.cos
 
 class AccelerometerView : View {
@@ -70,14 +69,14 @@ class AccelerometerView : View {
         drawer!!.draw(canvas)
     }
 
-    fun updateOrientation(pitch: Float, roll: Float) {
+    fun updateOrientation(pitch: Float, roll: Float, azimuth: Float) {
         if (this.pitch.toInt() != pitch.toInt() || this.roll.toInt() != roll.toInt()) {
             this.pitch = pitch
             this.roll = roll
             point!![width * 0.37f * cos(Math.toRadians((90 - roll).toDouble()))
                 .toFloat()] = width * 0.37f * cos(Math.toRadians((90 - pitch).toDouble()))
                 .toFloat()
-            drawer!!.update(point!!)
+            drawer!!.update(point!!,azimuth)
             invalidate()
         }
     }

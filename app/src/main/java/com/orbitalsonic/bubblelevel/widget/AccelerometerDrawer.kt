@@ -7,6 +7,8 @@ import androidx.core.content.ContextCompat
 import com.orbitalsonic.bubblelevel.R
 
 class AccelerometerDrawer(context: Context, private val isSimple: Boolean) : ViewDrawer<PointF?> {
+    private var zPos: Float=0f
+    private var horizentalLinePaint: Paint
     private val pathPaint: Paint
     private val ballPaint: Paint
     private val plusPaint: Paint
@@ -41,21 +43,44 @@ class AccelerometerDrawer(context: Context, private val isSimple: Boolean) : Vie
         //Draw ball
        // canvas.drawCircle(center.x - xPos, center.y + yPos, radius.toFloat(), ballPaint)
 
+        canvas?.save()
+
+        canvas?.rotate(zPos, center.x - xPos, center.y + yPos)
+
+
+        canvas.drawLine(
+            center.x - xPos - radius, center.y + yPos,
+            center.x - xPos + radius, center.y + yPos,
+            horizentalLinePaint
+        )
+
+        canvas?.restore()
+
+
+
         canvas.drawLine(
             center.x - xPos - plusRadius, center.y + yPos,
             center.x - xPos + plusRadius, center.y + yPos,
             plusPaint
         )
+
         canvas.drawLine(
             center.x - xPos, center.y + yPos - plusRadius,
             center.x - xPos, center.y + yPos + plusRadius,
             plusPaint
         )
+
+
+
+
+
+
     }
 
-    override fun update(value: PointF?) {
+    override fun update(value: PointF?,azimuth: Float) {
         xPos = value!!.x
         yPos = value.y
+        zPos = azimuth
     }
 
     init {
@@ -70,6 +95,12 @@ class AccelerometerDrawer(context: Context, private val isSimple: Boolean) : Vie
         ballPaint.color = ballColor
         center = Point(0, 0)
 
+
+        horizentalLinePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            strokeWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2f, context.resources.displayMetrics)
+            style = Paint.Style.STROKE
+            color = Color.RED
+        }
 
         plusPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             strokeWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2f, context.resources.displayMetrics)
